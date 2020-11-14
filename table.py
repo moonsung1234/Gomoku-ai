@@ -10,6 +10,9 @@ class Tool :
                 if not np_table[i, j] == init_value :
                     index_table.append([i, j])
 
+        if len(index_table) == 0 :
+            return np_table
+
         index_table = np.array(index_table)
         sliced_table1 = index_table[:, 0:1]
         sliced_table2 = index_table[:, 1:]
@@ -27,9 +30,22 @@ class Tool :
         return returned_table
 
 
-    def searchTable(self, np_table, target_table) :
+    def searchTable(self, np_table, target_table, origin_table, init_value) :
         parent_table = np_table.tolist()
         child_table = target_table.tolist()
+
+        all_count1 = 0
+        all_count2 = 0
+
+        for check_i in range(len(parent_table)) :
+            for check_j in range(len(parent_table[0])) :
+                if not parent_table[check_i][check_j] == init_value :
+                    all_count1 += 1
+
+        for check_i in range(len(child_table)) :
+            for check_j in range(len(child_table[0])) :
+                if not child_table[check_i][check_j] == init_value :
+                    all_count2 += 1
 
         for i in range(len(parent_table)) :
             if i > (len(parent_table) - 1) - (len(child_table) - 1) :
@@ -39,18 +55,25 @@ class Tool :
                 if j > (len(parent_table[0]) - 1) - (len(child_table[0]) - 1) :
                     break
 
-                print((i, j))
+                wrong_count = 0
+                wrong_index = None
 
                 for ii in range(i, i + len(child_table)) :
                     for jj in range(j, j + len(child_table[0])) :
                         if not parent_table[ii][jj] == child_table[ii - i][jj - j] :
-                            break
+                            wrong_count += 1
+                            wrong_index = (ii, jj)
 
-                    if not parent_table[ii][jj] == child_table[ii - i][jj - j] :
-                        break
+                for check_i in range(len(parent_table)) :
+                    for check_j in range(len(parent_table[0])) :
+                        if not i <= check_i <= i + len(child_table) - 1 or not j <= check_j <= j + len(child_table[0]) - 1 :
+                            if not parent_table[check_i][check_j] == init_value :
+                                wrong_count += 1
+                                wrong_index = (check_i, check_j)
 
-                    elif ii == i + len(child_table) - 1 :
-                        return True
+                if wrong_count == 1 and all_count1 > all_count2 :
+                    if origin_table[wrong_index[0], wrong_index[1]] == init_value :
+                        return True, wrong_index
 
-        return False
+        return False, None
             

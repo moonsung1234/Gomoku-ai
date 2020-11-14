@@ -19,14 +19,53 @@ table = np.array([
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ])
 
-for _ in range(3) :
-    y1, x1 = con.getRandomIndex(table, 0)
-    table[y1, x1] = 1
+tables.append(
+    np.array([
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ])
+)
 
+tables.append(
+    np.array([
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ])
+)
+
+for _ in range(7) :
     extracted_table = tool.extractTable(table, 0)
-    print(extracted_table)
-    print(table)
 
-    tables.append(extracted_table) 
+    for i in range(len(tables)) :
+        is_in, index = tool.searchTable(tables[i], extracted_table, table, 0)
+        
+        if is_in :
+            print("find : ", tables[i])
+            table[index[0], index[1]] = 1
+            break
+
+        elif i == len(tables) - 1 :
+            print("random")
+            idx1, idx2 = con.getRandomIndex(table, 0)
+            table[idx1, idx2] = 1
+            break
+
+    print(table)
 
 print(tables)
